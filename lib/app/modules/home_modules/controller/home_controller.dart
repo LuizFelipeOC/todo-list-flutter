@@ -31,4 +31,8 @@ class HomeController extends ValueNotifier<HomeState> {
       value = SucessState(listAcitvitys);
     } catch (e) {}
   }
+
+  navigatoToIncludeAcitivity(context) {
+    Navigator.pushNamed(context, '/add_acitivity');
+  }
 }

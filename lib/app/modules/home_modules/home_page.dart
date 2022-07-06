@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingButtonComponent(
         icon: Icons.add,
-        onpress: () => {},
+        onpress: () => homeController.navigatoToIncludeAcitivity(context),
       ),
     );
   }
