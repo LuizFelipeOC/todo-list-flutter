@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:todo_list/app/modules/add_activity_module/add_acitivity.dart';
 import 'package:todo_list/app/modules/home_modules/home_page.dart';
 import 'package:todo_list/app/modules/splash_modules/splash_page.dart';
 import 'package:todo_list/app/shared/data/database/app_database.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/splash': (context) => const SplashPage(),
         '/home': (context) => const HomePage(),
+        '/add_acitivity': (context) => const AddAcitivtyPage(),
       },
     );
   }
