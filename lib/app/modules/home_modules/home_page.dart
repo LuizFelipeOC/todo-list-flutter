@@ -32,52 +32,99 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            HeaderComponent(
-              pathImage: AppImages.logo,
-              titleHeader: 'Atividades diárias',
-            ),
-            ValueListenableBuilder(
-              builder: (context, value, child) {
-                if (value is LoadingState) {
-                  return SizedBox(
-                    height: screen.height * .7,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-
-                if (value is SucessState) {
-                  return Center(
-                    child: Text(
-                      '${value.activitys.first.title}',
-                    ),
-                  );
-                }
-
-                if (value is EmptyState) {
-                  return SizedBox(
-                    height: screen.height * .7,
-                    child: const Center(
-                      child: Text(
-                        'Você não tem nenhuma atividade salva',
-                        style: AppStyles.heading,
-                        textAlign: TextAlign.center,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 50),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              HeaderComponent(
+                pathImage: AppImages.logo,
+                titleHeader: 'Anotações',
+              ),
+              ValueListenableBuilder(
+                builder: (context, value, child) {
+                  if (value is LoadingState) {
+                    return SizedBox(
+                      height: screen.height * .7,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                  );
-                }
+                    );
+                  }
 
-                return Container();
-              },
-              valueListenable: homeController,
-            )
-          ],
+                  if (value is SucessState) {
+                    return ListView.builder(
+                      physics: const ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: value.activitys.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          color: AppColors.white.withOpacity(0.1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      '${value.activitys[index].title}',
+                                      style: AppStyles.heading,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, bottom: 10),
+                                    child: Text(
+                                      '${value.activitys[index].content}',
+                                      style: AppStyles.subHeading,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, bottom: 10),
+                                child: IconButton(
+                                  onPressed: () =>
+                                      homeController.deleteAnnotions(
+                                    int.parse(
+                                      '${value.activitys[index].id}',
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.delete),
+                                  color: AppColors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }
+
+                  if (value is EmptyState) {
+                    return SizedBox(
+                      height: screen.height * .7,
+                      child: const Center(
+                        child: Text(
+                          'Você não tem nenhuma atividade salva',
+                          style: AppStyles.heading,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Container();
+                },
+                valueListenable: homeController,
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingButtonComponent(
