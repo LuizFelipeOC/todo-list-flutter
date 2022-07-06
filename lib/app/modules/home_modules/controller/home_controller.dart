@@ -22,14 +22,33 @@ class HomeController extends ValueNotifier<HomeState> {
           )
           .toList();
 
-      await Future.delayed(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 1));
 
       if (listAcitvitys.isEmpty) {
         return value = EmptyState();
       }
 
       value = SucessState(listAcitvitys);
-    } catch (e) {}
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  deleteAnnotions(int id) async {
+    final Database database = await AppDataBase().initDatabase();
+    final Batch batch = database.batch();
+
+    batch.delete(
+      'ACTIVITYS',
+      where: 'id = ?',
+      whereArgs: [
+        id,
+      ],
+    );
+
+    await batch.commit(noResult: true);
+
+    fetchAcitivitys();
   }
 
   navigatoToIncludeAcitivity(context) {
